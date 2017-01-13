@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+svg {
+  margin-top: 100px;
+}
+
+.arc text {
+  font: 18px sans-serif;
+  text-anchor: middle;
+}
+
+.arc path {
+  stroke: #fff;
+}
+
+</style>
+
+<body></body>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.19.0/d3-legend.min.js"></script>
+<script>
+
+var data = [{'classification': 'non-fiction', 'count': 30}, {'classification': 'fiction', 'count': 10}];
+
+    var width = 960,
+    height = 400,
+    radius = Math.min(width, height) / 2;
+
+    var color = d3.scaleOrdinal().range(["#98abc5", "#8a89a6"]);
+
+    var classScale = d3.scaleOrdinal().domain(['non-fiction', 'fiction']).range(["#98abc5", "#8a89a6"]);
+
+	var pie = d3.pie()
+	    .sort(null)
+	    .value(function(d) { return d.count; });
+
+	var arc = d3.arc()
+    .outerRadius(radius - 10)
+    .innerRadius(0);
+
+var labelArc = d3.arc()
+    .outerRadius(radius - 40)
+    .innerRadius(radius - 40);
+
+    var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+  var g = svg.selectAll(".arc")
+      .data(pie(data))
+    .enter().append("g")
+      .attr("class", "arc");
+
+  g.append("path")
+      .attr("d", arc)
+      .style("fill", function(d) {return color(d.data.count); });
+
+  svg.append("g")
+  .attr("class", "legendLinear")
+  .attr("transform", "translate(" + radius + "," + (-1 * (radius/2)) + ")");
+
+  var legendLinear = d3.legendColor()
+  .shapeWidth(30)
+  .orient('vertical')
+  .scale(classScale);
+
+  svg.select(".legendLinear")
+  .call(legendLinear);
+
+
+    
+//	}
+
+	</script>
