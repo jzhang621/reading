@@ -42,12 +42,12 @@ var bar = g.selectAll(".bar")
   .data(bins)
   .enter().append("g")
     .attr("class", "bar")
-    .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; });
+    .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + ratingToHeightScale(d.length) + ")"; });
 
 bar.append("rect")
     .attr("x", 1)
     .attr("width", x(bins[0].x1) - x(bins[0].x0) - 1)
-    .attr("height", function(d) { return height - y(d.length); });
+    .attr("height", function(d) { return height - ratingToHeightScale(d.length); });
 
 bar.append("text")
     .attr("dy", ".75em")

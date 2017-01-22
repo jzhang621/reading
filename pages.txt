@@ -1,0 +1,38 @@
+Title: Invisible Cities, Authors: [u'Italo Calvino'], Page Count: 176
+Title: Around the League in 80 Days, Authors: [u'Gabriel Allen & William Allen'], Page Count: 138
+Title: City by City, Authors: [u'Various'], Page Count: 497
+Title: Exercises in Style, Authors: [u'Raymond Queneau', u'Barbara Wright'], Page Count: 197
+Title: The Power Broker, Authors: [u'Robert A. Caro'], Page Count: 1312
+Title: Atoms Under the Floorboards, Authors: [u'Chris Woodford'], Page Count: 288
+Title: The Drunkard's Walk, Authors: [u'Leonard Mlodinow'], Page Count: 352
+Title: The Old Capital, Authors: [u'Yasunari Kawabata'], Page Count: 236
+Title: Looking for the Lost, Authors: [u'Alan Booth'], Page Count: 387
+Title: Born Standing Up, Authors: [u'Steve Martin'], Page Count: 224
+Title: A Tale for the Time Being, Authors: [u'Ruth Ozeki'], Page Count: 432
+Title: Sanshiro, Authors: [u'Natsume Soseki'], Page Count: 288
+Title: The White Album, Authors: [u'Joan Didion'], Page Count: 222
+Title: Barbarian Days, Authors: [u'William Finnegan'], Page Count: 464
+Title: 1Q84, Authors: [u'Haruki Murakami'], Page Count: 944
+Title: Cooked, Authors: [u'Michael Pollan'], Page Count: 480
+Title: Basketball Analytics, Authors: [u'Stephen M. Shea', u'Christopher E. Baker'], PageCount: 234
+Title: All the Light We Cannot See, Authors: [u'Anthony Doerr'], Page Count: 544
+Title: The Sixth Extinction, Authors: [u'Elizabeth Kolbert'], Page Count: 336
+Title: A Sense of Where You Are, Authors: [u'John McPhee'], Page Count: 240
+Title: When Breath Becomes Air, Authors: [u'Paul Kalanithi'], Page Count: 256
+Title: Ready Player One, Authors: [u'Ernest Cline'], Page Count: 374
+Title: The Design of Everyday Things, Authors: [u'Don Norman'], Page Count: 384
+Title: What I Talk About When I Talk About Running, Authors: [u'Haruki Murakami'], Page Count: 192
+Title: The Subtle Art of Not Giving a F*ck, Authors: [u'Mark Manson'], Page Count: 224
+Title: The Inner Game of Tennis, Authors: [u'W. Timothy Gallwey'], Page Count: 160
+Title: The Score Takes Care of Itself, Authors: [u'Bill Walsh', u'Steve Jamison', u'CraigWalsh'], Page Count: 288
+Title: Tribe, Authors: [u'Sebastian Junger'], Page Count: 160
+Title: Hillbilly Elegy, Authors: [u'J. D. Vance'], Page Count: 272
+Title: The Elegant Universe: Superstrings, Hidden Dimensions, and the Quest for the Ultimate Theory, Authors: [u'Brian Greene'], Page Count: 464
+Title: Catfish and Mandala, Authors: [u'Andrew X. Pham'], Page Count: 336
+Title: Deep Work, Authors: [u'Cal Newport'], Page Count: 288
+Title: So Good They Can't Ignore You, Authors: [u'Cal Newport'], Page Count: 288
+Title: Seven Seconds Or Less, Authors: [u'Jack McCallum'], Page Count: 320
+Title: Nothing Is True and Everything Is Possible, Authors: [u'Peter Pomerantsev'], Page Count: 256
+Title: Cat's Cradle, Authors: [u'Kurt Vonnegut'], Page Count: 304
+Title: Bike Snob, Authors: [u'BikeSnobNYC'], Page Count: 222
+Title: The Second Machine Age: Work, Progress, and Prosperity in a Time of Brilliant Technologies, Authors: [u'Erik Brynjolfsson', u'Andrew McAfee'], Page Count: 304

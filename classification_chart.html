@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Device Distribution</title>
+</head>
+
+<style>
+
+.fiction {
+    fill: #d98c8c;
+}
+
+.nonfiction {
+    fill: #993333;
+}
+
+text {
+    font-family: 'Fira Sans Condensed', sans-serif;
+    font-size: 15px;
+    fill: white;
+}
+
+
+</style>
+
+<svg height="200" width="850"></svg>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Fira+Sans+Condensed" rel="stylesheet">
+
+<script>
+
+    var translate = function(left, top) {
+        return "translate(" + left + "," + top + ")";
+    };
+
+    var barChartContainer = d3.select("svg"),
+        graphMargins = {top: 50, right: 50, bottom: 50, left: 50};
+
+    var graphWidth = +barChartContainer.attr("width") - graphMargins.left - graphMargins.right;
+
+    var graphContainer = barChartContainer.append("g")
+        .attr("transform", translate(graphMargins.left, graphMargins.top));
+
+    var data = [
+        {'type': 'Non-Fiction', 'count': 30},
+        {'type': 'Fiction', 'count': 10}
+    ];
+
+    var totalCount = d3.sum(data, function(d) {return d.count});
+
+    var countToWidthScale = d3.scaleLinear().rangeRound([0, graphWidth]).domain([0, totalCount]);
+
+    var barHeight = 30;
+
+    var barGroups = graphContainer.selectAll(".bar")
+        .data(data)
+        .enter()
+        .append("g")
+        .attr("class", "bar")
+        .attr("transform", function(d, i) {
+            var left;
+            if (i == 0) {
+               left = 0;
+            } else {
+                left = countToWidthScale(data[i - 1].count);
+            }
+            return translate(left, 0);
+        });
+
+    barGroups.append("rect")
+        .attr("height", function() { return barHeight })
+        .attr("width", function (d) { return countToWidthScale(d.count)} )
+        .attr("class", function(d) {
+            if (d.type == 'Fiction') {
+                return 'fiction'
+            } else {
+                return 'nonfiction'
+            }
+        });
+
+    var textYOffset = 10;
+    var labelTextXOffset = 6;
+    barGroups.append("text")
+        .data(data)
+        .attr("x", labelTextXOffset)
+        .attr("dy", ".65em")
+        .attr("y", textYOffset)
+        .text(function(d) { return d.type; })
+
+    var percentTextXOffset = 30;
+    var toPercentFormat = d3.format(",.0%");
+
+    barGroups.append("text")
+        .data(data)
+        .attr("class", "percent")
+        .attr("dy", ".65em")
+        .attr("y", textYOffset)
+        .attr("x", function(d) { return countToWidthScale(d.count) - percentTextXOffset})
+        .text(function(d) {
+            var percent = d.count / totalCount;
+            return toPercentFormat(percent);
+        })
+
+</script>
+
+
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reading Timeline</title>
+</head>
+
+<style>
+
+.kindle {
+    fill: #8080ff;
+}
+
+.paperback {
+    fill: #0000ff;
+}
+
+
+</style>
+
+<svg height="275" width="850"></svg>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Fira+Sans+Condensed" rel="stylesheet">
+
+<script>
+
+    var translate = function(left, top) {
+        return "translate(" + left + "," + top + ")";
+    };
+
+    var barChartContainer = d3.select("svg"),
+        graphMargins = {top: 50, right: 50, bottom: 50, left: 50};
+
+    var graphWidth = +barChartContainer.attr("width") - graphMargins.left - graphMargins.right;
+    var graphHeight = +barChartContainer.attr("height") - graphMargins.top - graphMargins.bottom;
+
+    var graphContainer = barChartContainer.append("g")
+        .attr("transform", translate(graphMargins.left, graphMargins.top));
+
+    d3.json("times.json", function(data) {
+
+        data.forEach(function(d) {
+            d.startDate = new Date(d.startdate * 1000);
+            d.endDate = new Date(d.enddate * 1000);
+        });
+
+        var indexes = data.map(function(d, i){ return i });
+
+        var minDateTs = d3.min(data, function(d) { return d.startdate });
+        var maxDateTs = d3.max(data, function(d) { return d.enddate });
+
+        var dateToWidthScale = d3.scaleLinear().rangeRound([0, graphWidth]).domain([minDateTs, maxDateTs]);
+        var heightScale = d3.scaleBand().rangeRound([graphHeight, 0]).domain(indexes);
+
+        var barGroups = graphContainer.selectAll(".bar")
+            .data(data)
+            .enter()
+            .append("g")
+            .attr("class", "bar")
+            .attr("transform", function(d, i) {
+                var left = dateToWidthScale(d.startdate);
+                var top = heightScale(i);
+                return translate(left, top);
+            });
+
+        var offsetBetweenBars = 1;
+
+        barGroups.append("rect")
+            .attr("height", function() { return heightScale.bandwidth() - offsetBetweenBars})
+            .attr("width", function (d) {
+                return dateToWidthScale(d.enddate) - dateToWidthScale(d.startdate)}
+            )
+            .attr("class", function(d) {
+                if (d.format == 'Kindle') {
+                    return 'kindle'
+                } else{
+                   return 'paperback'
+                }
+            });
+
+        var minDate = d3.min(data, function(d) { return d.startDate });
+        var maxDate = d3.max(data, function(d) { return d.endDate });
+
+        console.log(minDate);
+        console.log(maxDate);
+
+        var timeScale = d3.scaleTime().domain([minDate, maxDate]).rangeRound([0, graphWidth]);
+
+        var timeAxis = d3.axisBottom()
+            .scale(timeScale)
+            .ticks(d3.timeWeek)
+            .tickFormat(d3.timeFormat('%m.%d'))
+            .tickSize(0)
+            .tickPadding(8);
+
+        barChartContainer.append('g')
+            .attr('class', 'x axis')
+            .attr('transform', translate(graphMargins.right, graphMargins.top + graphHeight))
+            .call(timeAxis);
+    });
+
+</script>

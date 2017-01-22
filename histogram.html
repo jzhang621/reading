@@ -8,7 +8,8 @@
 
 .bar text {
   fill: #fff;
-  font: 14px sans-serif;
+  font-size: 16px;
+  font-family: 'Fira Sans Condensed', sans-serif;
 }
 
 .bar .label {
@@ -20,6 +21,7 @@
 </style>
 <svg width="960" height="520"></svg>
 <script src="https://d3js.org/d3.v4.min.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Fira+Sans+Condensed" rel="stylesheet">
 <script>
 
 d3.json("book_data.json", function(data){
@@ -50,12 +52,12 @@ d3.json("book_data.json", function(data){
       .data(bins)
       .enter().append("g")
         .attr("class", "bar")
-        .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; });
+        .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + ratingToHeightScale(d.length) + ")"; });
 
     bar.append("rect")
         .attr("x", 2)
         .attr("width", x(bins[0].x1) - x(bins[0].x0) - 4)
-        .attr("height", function(d) { return height - y(d.length); });
+        .attr("height", function(d) { return height - ratingToHeightScale(d.length); });
 
     bar.append("text")
         .attr("dy", ".75em")
@@ -68,7 +70,7 @@ d3.json("book_data.json", function(data){
 
     bar.append("text")
         .attr("dy", ".75em")
-        .attr("y", function(d) { return height - y(d.length) + 9; })
+        .attr("y", function(d) { return height - ratingToHeightScale(d.length) + 9; })
         .attr("x", (x(bins[0].x1) - x(bins[0].x0)) / 2)
         .attr("text-anchor", "middle")
         .attr("class", "label")

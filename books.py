@@ -72,8 +72,8 @@ def main():
         spreadsheetId=spreadsheetId, range=rangeName).execute()
     values = result.get('values', [])
 
-    parse_and_write_values(values)
-    # parse_and_write_dates(values)
+    # parse_and_write_values(values)
+    parse_and_write_dates(values)
 
 
 def parse_and_write_values(values):
@@ -94,13 +94,13 @@ def parse_and_write_values(values):
             if field_name == 'start date' or field_name == 'end date':
               if value:
                 date_val = value + '/2016'
-                date_val = datetime.strptime(date_val, '%m/%d/%Y')
+                date_val = datetime.strptime(date_val, '%m/%d/%y')
                 value = int(time.mktime(date_val.timetuple()))
 
             bd[field_name] = value
         all_book_data.append(bd)
 
-    write_book_data_to_file('book_data_with_pages.json', all_book_data)
+    write_book_data_to_file('book_data.json', all_book_data)
 
 def parse_and_write_dates(values):
 

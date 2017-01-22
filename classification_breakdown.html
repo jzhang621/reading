@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+
+text {
+	font-family: 'Fira Sans Condensed', sans-serif;
+}
+
+.bar {
+  fill: steelblue;
+}
+
+.axisLabel {
+	font-size: 20px;
+	fill: black;
+}
+
+
+.axis--y text{
+	font-size: 13px;
+}
+
+.fiction {
+	fill: cornflowerblue;
+}
+
+.nonfiction {
+	fill: cadetblue;
+}
+
+</style>
+<svg width="1000" height="500"></svg>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.19.0/d3-legend.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Fira+Sans+Condensed" rel="stylesheet">
+<script>
+
+var svg = d3.select("svg"),
+    graphMargin = {top: 60, right: 40, bottom: 40, left: 80},
+    graphWidth = +svg.attr("width") - graphMargin.left - graphMargin.right,
+    graphHeight = +svg.attr("height") - graphMargin.top - graphMargin.bottom;
+
+var timeToWidthScale = d3.scaleBand().rangeRound([0, graphWidth]);
+    ratingToHeightScale = d3.scaleLinear().rangeRound([graphHeight, 0]);
+
+var graphContainer = svg.append("g")
+    .attr("transform", "translate(" + graphMargin.left + "," + graphMargin.top + ")");
+
+d3.json("book_data.json", function(data) { 
+
+	var ratingsByClassification = data.map(function(d) { return {'rating': parseFloat(d.rating), 'classification': d.classification}});
+
+	var ratingsPlaceHolder = [];
+	for (var i = 0; i < ratingsByClassification.length; i++) {
+    	ratingsPlaceHolder.push(i);
+	}
+
+	timeToWidthScale.domain(ratingsPlaceHolder);
+	ratingToHeightScale.domain([1, 10]);
+
+  var yAxisOffset = -7.5;
+  graphContainer.append("g")
+      .attr("class", "axis axis--y")
+      .attr("transform", "translate(" + yAxisOffset + ",0)")
+      .call(d3.axisLeft(ratingToHeightScale).ticks(11));
+
+  var colorLegend = d3.scaleOrdinal()
+    .domain(["fiction", "non-fiction"])
+    .range([ "cornflowerblue", "cadetblue"])
+
+  var yAxisLabelMarginRight = -47.5;
+  // y axis label
+  graphContainer.append("g")
+  	  .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", yAxisLabelMarginRight)
+      .attr("x", -1 * ratingToHeightScale(6.5))
+      .attr("dy", "0.71em")
+      .attr("text-anchor", "end")
+      .text("Rating")
+      .attr("class", "axisLabel");
+
+var graphMidWidth = graphWidth / 2;
+  /*
+  var xAxisLabelMarginTop = 25;
+  // x axis label
+  graphContainer.append("g")
+  	  .append("text")
+      .attr("transform",
+            "translate(" + graphMidWidth + " ," + (graphHeight + xAxisLabelMarginTop) + ")")
+      .attr("class", "axisLabel")
+      .style("text-anchor", "middle")
+      .text("Date");
+   */
+
+  var colorLegendCellWidth = 90;
+  var colorLegendCellBuffer = 2;
+  var colorLegendOffset = -50;
+  // color legend
+  graphContainer.append("g")
+  	.attr("class", "legendOrdinal")
+  	.attr("transform", "translate(" + (graphMidWidth - colorLegendCellWidth) + "," + colorLegendOffset + ")")
+
+  var legendLinear = d3.legendColor()
+  	.shapeWidth(colorLegendCellWidth)
+  	.orient('horizontal')
+  	.scale(colorLegend)
+
+  svg.select(".legendOrdinal")
+  	.call(legendLinear);
+
+  graphContainer.selectAll(".bar")
+    .data(data)
+    .enter().append("rect")
+      .attr("x", function(d, i) { return timeToWidthScale(i)})
+      .attr("y", function(d) { return ratingToHeightScale(d.rating); })
+      .attr("width", timeToWidthScale.bandwidth() - 3)
+      .attr("class", function(d) {
+      	if (d.classification == 'Fiction') {
+      		return 'bar fiction'
+      	} else {
+      		return 'bar nonfiction';
+      	}
+      })
+      .attr("height", function(d) { return graphHeight - ratingToHeightScale(d.rating); });
+});
+
+
+</script>

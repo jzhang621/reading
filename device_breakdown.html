@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+text {
+    font-family: 'Fira Sans Condensed', sans-serif;
+}
+
+.axis--y text{
+    font-size: 13px;
+}
+
+.kindle {
+    fill: tan;
+}
+
+.paperback {
+    fill: navajowhite;
+}
+
+</style>
+<svg id="barChart" width="1000" height="500"></svg>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.19.0/d3-legend.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Fira+Sans+Condensed" rel="stylesheet">
+
+<script>
+
+    var translate = function(left, top) {
+        return "translate(" + left + "," + top + ")";
+    };
+
+    var barChartContainer = d3.select("#barChart"),
+        graphMargins = {top: 50, right: 50, bottom: 50, left: 50},
+        graphWidth = +barChartContainer.attr("width") - graphMargins.left - graphMargins.right,
+        graphHeight = +barChartContainer.attr("height") - graphMargins.top - graphMargins.bottom;
+
+    var graphMidWidth = graphWidth / 2;
+
+    var graphContainer = barChartContainer.append("g")
+        .attr("transform", translate(graphMargins.left, graphMargins.right));
+
+    d3.json("book_data.json", function(data) {
+
+        var indexesPlaceholder = [];
+        for (var i = 0; i < data.length; i++) {
+            indexesPlaceholder.push(i);
+        }
+
+        var indexToWidthScale = d3.scaleBand().rangeRound([0, graphWidth]).domain(indexesPlaceholder);
+            ratingToHeightScale = d3.scaleLinear().rangeRound([graphHeight, 0]).domain([1, 10]);
+
+        graphContainer.selectAll(".bar")
+            .data(data)
+            .enter().append("rect")
+            .attr("x", function(d, i) { return indexToWidthScale(i)})
+            .attr("y", function(d) { return ratingToHeightScale(d.rating); })
+            .attr("width", indexToWidthScale.bandwidth() - 3)
+            .attr("class", function(d) {
+                if (d.format == 'Kindle') {
+                    return 'kindle';
+                } else {
+                    return 'paperback';
+                }
+            })
+            .attr("height", function(d) { return graphHeight - ratingToHeightScale(d.rating); });
+
+        var yAxisOffset = -7.5;
+        graphContainer.append("g")
+            .attr("class", "axis axis--y")
+            .attr("transform", "translate(" + yAxisOffset + ",0)")
+            .call(d3.axisLeft(ratingToHeightScale).ticks(11));
+
+        var colorLegendScale = d3.scaleOrdinal()
+            .domain(["kindle", "paperback"])
+            .range([ "tan", "navajowhite"]);
+
+        var colorLegendCellWidth = 90;
+        var colorLegend = d3.legendColor()
+            .shapeWidth(colorLegendCellWidth)
+            .orient('horizontal')
+            .scale(colorLegendScale)
+
+        var colorLegendOffset = -50;
+        graphContainer.append("g")
+            .attr("class", "legendOrdinal")
+            .attr("transform", translate((graphMidWidth - colorLegendCellWidth), colorLegendOffset));
+
+        barChartContainer.select(".legendOrdinal")
+            .call(colorLegend);
+
+    });
+
+</script>

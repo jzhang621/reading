@@ -2,77 +2,80 @@
 <meta charset="utf-8">
 <style>
 
-svg {
-  margin-top: 100px;
+body {
+  font: 10px sans-serif;
 }
 
-.arc text {
-  font: 18px sans-serif;
-  text-anchor: middle;
+.bar rect {
+  fill: steelblue;
 }
 
-.arc path {
+.bar text.value {
+  fill: white;
+}
+
+.axis {
+  shape-rendering: crispEdges;
+}
+
+.axis path {
+  fill: none;
+}
+
+.x.axis line {
   stroke: #fff;
+  stroke-opacity: .8;
+}
+
+.y.axis path {
+  stroke: black;
 }
 
 </style>
-
-<body></body>
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.19.0/d3-legend.min.js"></script>
+<body>
+<script src="//d3js.org/d3.v4.min.js"></script>
 <script>
 
-var data = [{'classification': 'non-fiction', 'count': 30}, {'classification': 'fiction', 'count': 10}];
+var m = [30, 10, 10, 30],
+    w = 960 - m[1] - m[3],
+    h = 400 - m[0] - m[2];
 
-    var width = 960,
-    height = 400,
-    radius = Math.min(width, height) / 2;
+var format = d3.format(",.0f");
 
-    var color = d3.scaleOrdinal().range(["#98abc5", "#8a89a6"]);
+var x = d3.scaleLinear().range([0, w]);
+var y = d3.scaleBand().rangeRound([0, h]).padding(0.1);
 
-    var classScale = d3.scaleOrdinal().domain(['non-fiction', 'fiction']).range(["#98abc5", "#8a89a6"]);
-
-	var pie = d3.pie()
-	    .sort(null)
-	    .value(function(d) { return d.count; });
-
-	var arc = d3.arc()
-    .outerRadius(radius - 10)
-    .innerRadius(0);
-
-var labelArc = d3.arc()
-    .outerRadius(radius - 40)
-    .innerRadius(radius - 40);
-
-    var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height)
+var svg = d3.select("body").append("svg")
+    .attr("width", w + m[1] + m[3])
+    .attr("height", h + m[0] + m[2])
   .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
-  var g = svg.selectAll(".arc")
-      .data(pie(data))
+  var data = [{'classification': 'non-fiction', 'count': 30}, {'classification': 'fiction', 'count': 10}];
+
+  // Set the scale domain.
+  x.domain([0, d3.max(data, function(d) { return d.count; })]);
+  ratingToHeightScale.domain(data.map(function(d) { return d.classification; }));
+
+  var bar = svg.selectAll("g.bar")
+      .data(data)
     .enter().append("g")
-      .attr("class", "arc");
+      .attr("class", "bar")
+      .attr("transform", function(d) { return "translate(0," + ratingToHeightScale(d.classification) + ")"; });
 
-  g.append("path")
-      .attr("d", arc)
-      .style("fill", function(d) {return color(d.data.count); });
+  bar.append("rect")
+      .attr("width", function(d) { return x(d.count); })
+      .attr("height", ratingToHeightScale.bandwidth());
 
-  svg.append("g")
-  .attr("class", "legendLinear")
-  .attr("transform", "translate(" + radius + "," + (-1 * (radius/2)) + ")");
+  bar.append("text")
+      .attr("class", "value")
+      .attr("x", function(d) { return x(d.count); })
+      .attr("y", ratingToHeightScale.rangeBand() / 2)
+      .attr("dx", -3)
+      .attr("dy", ".35em")
+      .attr("text-anchor", "end")
+      .text(function(d) { return format(d.count); });
 
-  var legendLinear = d3.legendColor()
-  .shapeWidth(30)
-  .orient('vertical')
-  .scale(classScale);
-
-  svg.select(".legendLinear")
-  .call(legendLinear);
+</script>
 
 
-    
-//	}
-
-	</script>
