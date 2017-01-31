@@ -89,7 +89,7 @@ text {
             }
         })
 
-    var percentTextXOffset = 30;
+    var percentTextXOffset = 20;
     var toPercentFormat = d3.format(",.0%");
 
     barGroups.append("text")
@@ -99,8 +99,11 @@ text {
         .attr("y", textYOffset)
         .attr("x", function(d) { return countToWidthScale(d.count) - percentTextXOffset})
         .text(function(d) {
+            /*
             var percent = d.count / totalCount;
             return toPercentFormat(percent);
+            */
+            return d.count;
         })
 
 </script>

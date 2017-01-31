@@ -15,12 +15,21 @@
     fill: #0000ff;
 }
 
+svg {
+    margin: 50px;
+}
+
+text {
+    font-family: 'Fira Sans Condensed', sans-serif;
+}
+
 
 </style>
 
-<svg height="275" width="850"></svg>
+<svg height="545" width="1050"></svg>
 
 <script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.19.0/d3-legend.js"></script>
 <link href="https://fonts.googleapis.com/css?family=Fira+Sans+Condensed" rel="stylesheet">
 
 <script>
@@ -30,7 +39,7 @@
     };
 
     var barChartContainer = d3.select("svg"),
-        graphMargins = {top: 50, right: 50, bottom: 50, left: 50};
+        graphMargins = {top: 50, right: 50, bottom: 180, left: 50};
 
     var graphWidth = +barChartContainer.attr("width") - graphMargins.left - graphMargins.right;
     var graphHeight = +barChartContainer.attr("height") - graphMargins.top - graphMargins.bottom;
@@ -82,9 +91,6 @@
         var minDate = d3.min(data, function(d) { return d.startDate });
         var maxDate = d3.max(data, function(d) { return d.endDate });
 
-        console.log(minDate);
-        console.log(maxDate);
-
         var timeScale = d3.scaleTime().domain([minDate, maxDate]).rangeRound([0, graphWidth]);
 
         var timeAxis = d3.axisBottom()
@@ -98,6 +104,49 @@
             .attr('class', 'x axis')
             .attr('transform', translate(graphMargins.right, graphMargins.top + graphHeight))
             .call(timeAxis);
+
+        var labelWidth = 25;
+        var labelHeight = 22;
+        var labelBeginningHeight = graphMargins.top + graphHeight + 30;
+        var labelBeginningWidth = (graphWidth / 2) - 10
+        var kindleLabel = barChartContainer.append('g')
+            .attr('transform', translate(labelBeginningWidth, labelBeginningHeight))
+
+        kindleLabel.append("rect")
+            .attr("height", labelHeight)
+            .attr('class', 'kindle')
+            .attr("width", labelWidth)
+
+        kindleLabel.append("text")
+            .text("Kindle")
+            .attr('transform', translate(labelWidth + 10, 15))
+
+        var labelPadding = 30;
+
+        var paperbackLabel = barChartContainer.append('g')
+            .attr('transform', translate(labelBeginningWidth, labelBeginningHeight + labelPadding));
+
+        paperbackLabel.append("rect")
+            .attr("height", labelHeight)
+            .attr('class', 'paperback')
+            .attr("width", labelWidth)
+
+        paperbackLabel.append("text")
+            .text("Paperback")
+            .attr('transform', translate(labelWidth + 10, 15))
+
+        var elegantUniverseLabel = barChartContainer.append("g")
+            .attr('transform', translate(246 + graphMargins.left, labelBeginningHeight + labelPadding * 2))
+
+        elegantUniverseLabel.append("rect")
+            .attr("height", labelHeight)
+            .attr('class', 'paperback')
+            .attr("width", 194)
+
+        elegantUniverseLabel.append("text")
+            .text("The Elegant Universe by Brian Greene")
+            .attr('transform', translate(194 + 10, 15))
+
     });
 
 </script>
